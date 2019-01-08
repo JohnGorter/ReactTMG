@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>This</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+
+<body>
+    <h1>In JavaScript, class methods are not bound by default.</h1>
+    <script type="application/javascript">
+        var module = {
+            x: 42,
+            getX: function() {
+                return this.x;
+            }
+        }
+
+        var unboundGetX = module.getX;
+        // console.log(unboundGetX());
+    </script>
+</body>
+
+</html>

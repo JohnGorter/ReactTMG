@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Props</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://unpkg.com/react-transition-group/dist/react-transition-group.min.js"></script>
+    
+</head>
+<style>
+    div { color:black; transition:color 0.43s ease-in-out;}
+    .message-enter { color:red; }
+    .message-enter-done { color:blue; }
+    .message-exit { color:green; }
+    .message-exit-done { color:yellow; }
+</style>
+
+<body>
+    <div id="root"></div>
+    
+    
+
+    <script type="text/babel">
+
+        class TransformDemo extends React.Component {
+            constructor() {
+                super();
+                this.state= { in: false };
+            }
+
+            toggleEnterState = () => {
+                this.setState({ in: !this.state.in });
+            }
+
+            render() {
+                return (
+                    <div>
+                        <ReactTransitionGroup.CSSTransition in={this.state.in} timeout={1000}  classNames="message">
+                            <div > I'm a fade Transition! </div>
+                        </ReactTransitionGroup.CSSTransition>
+                        <button onClick={this.toggleEnterState}>Click to Enter</button>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<TransformDemo />, document.querySelector("#root"));
+    </script>
+    
+</body>
+
+</html>

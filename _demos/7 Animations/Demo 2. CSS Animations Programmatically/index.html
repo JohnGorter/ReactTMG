@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="sidebar sidebar-transition" onclick="javascript:document.querySelector('.sidebar').classList.remove('sidebar-transition-active');">
+        <ul>
+            <li>Home</li>
+            <li>News</li>
+            <li>More</li>
+            <li>Log Out</li>
+        </ul>
+    </div>
+
+  
+    <style>
+        .sidebar { position:absolute; background-color:#eee;width:15rem;height:100vh;top:0px;}
+        .sidebar-transition { opacity:0; left:-15rem;}
+        .sidebar-transition-active {opacity:1; left:0; transition: ease-in-out 0.5s;}
+    </style>
+
+
+    <button onclick="javascript:document.querySelector('.sidebar').classList.add('sidebar-transition-active');">&#9776;</button>
+
+</body>
+</html>

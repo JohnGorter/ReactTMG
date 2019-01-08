@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <title>React 101 (ES6 classes)! - Modern JS</title>
+                <script data-require="fetch@1.1.0" data-semver="1.1.0" src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.1.0/fetch.min.js"></script>
+                <script data-require="browser.js@*" data-semver="0.0.1" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
+                <script data-require="react@15.4.1" data-semver="15.4.1" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.1/react.min.js"></script>
+                <script data-require="react@15.4.1" data-semver="15.4.1" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.1/react-dom.min.js"></script>
+                </head>
+
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+
+        // Main statefull component
+        class ContactsApp extends React.Component {
+            constructor(){
+                super(...arguments);
+                this.state={ filter:''};
+            }
+            handleUserInput(term) {this.setState({filter:term})}
+            render() { return (
+                <div>
+                    <SearchBar filter={this.state.filter}
+                               onUserInput={this.handleUserInput.bind(this)} />
+                    <ContactList contacts={this.props.contacts}
+                                  filter={this.state.filter} />
+                </div>
+            );
+            }
+        }
+        ContactsApp.propTypes = {
+            contacts: React.PropTypes.arrayOf(React.PropTypes.object)
+        }
+
+        // Pure component
+        class SearchBar extends React.Component {
+            handleChange(){ this.props.onUserInput(event.target.value)}
+
+            render(){ return (
+                <input type="search" value={this.props.filter}
+                    onChange={this.handleChange.bind(this)} />
+            )}
+        }
+        SearchBar.propTypes = {
+            onUserInput: React.PropTypes.func.isRequired,
+            filter: React.PropTypes.string.isRequired
+        }
+
+        // Pure component
+        class ContactList extends React.Component {
+            render(){
+                let filteredContacts = this.props.contacts.filter((c) => c.name.indexOf(this.props.filter) !== -1);
+                return (
+                    <ul>
+                        {filteredContacts.map(
+                            (c) => <ContactItem key={c.email}
+                                    name={c.name}
+                                    email={c.email} />
+                        )}
+                    </ul>
+                )
+            }
+        }
+        ContactList.propTypes = {
+            contacts: React.PropTypes.arrayOf(React.PropTypes.object),
+            filter: React.PropTypes.string.isRequired
+        }
+
+        // Pure component
+        class ContactItem extends React.Component {
+            render(){ return (
+                <li>{this.props.name} - {this.props.email}</li>
+            )}
+        }
+        ContactItem.propTypes = {
+            name: React.PropTypes.string.isRequired,
+            email: React.PropTypes.string.isRequired
+        }
+
+        let contacts = [
+            { name:"John Gorter", email:"john.gorter@infosupport.com"},
+            { name:"Maarten Mulders", email:"maarten.mulders@infosupport.com"},
+            { name:"Jan Peter ten Berge", email:"janpeter.tenberge@infosupport.com"},
+            { name:"Nico Jansen", email:"nico.jansen@infosupport.com"},
+            { name:"Marco Pil", email:"marco.pil@infosupport.com"},
+            { name:"Iemand Anders", email:"iemand.anders@infosupport.com"},
+        ]
+
+        ReactDOM.render(<ContactsApp contacts={contacts} />, document.getElementById("container"));
+        </script>
+    </body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                <title>React 101 (ES6 classes)! - Modern JS</title>
+                <script data-require="fetch@1.1.0" data-semver="1.1.0" src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.1.0/fetch.min.js"></script>
+                <script data-require="browser.js@*" data-semver="0.0.1" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
+                <script data-require="react@15.4.1" data-semver="15.4.1" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.1/react.min.js"></script>
+                <script data-require="react@15.4.1" data-semver="15.4.1" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.1/react-dom.min.js"></script>
+                </head>
+<body>
+    <div id="root"></div>
+
+   <script type="text/babel">
+
+    class Home extends React.Component {
+        render(){
+            return <h1>Home component</h1>
+        }
+    }
+
+    class About extends React.Component {
+        render(){
+            return <h1>About component</h1>
+        }
+    }
+
+    class MyApp extends React.Component {
+        constructor(){
+            super(); 
+            this.state = { route:'/home'};
+        }
+        componentDidMount() {
+            window.addEventListener("hashchange", () => {
+                this.setState({route: window.location.hash.substr(1)});
+            });
+        }
+        render(){
+            let Child;
+            switch(this.state.route){
+                case '/about': Child = About; break;
+                case '/home': Child = Home; break;
+                default: Child = Home; break;
+            }
+            return (
+                <div>
+                    <header>My Application</header>
+                    <menu>
+                        <ul>
+                            <li><a href="#/home">Home</a></li>
+                            <li><a href="#/about">About</a></li>
+                        </ul>
+                    </menu>
+                    <Child />
+                </div>
+            );
+            
+        }
+    }
+
+   ReactDOM.render(<MyApp />, document.querySelector("#root"));
+   </script>
+   
+</body>
+</html>

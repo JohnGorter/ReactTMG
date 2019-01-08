@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                <title>React 101 (ES6 classes)! - Modern JS</title>
+                <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+                <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+                <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/5.2.5/EventEmitter.js"></script>
+        </head>
+<body>
+   <div id="root"></div>
+
+   <script type="text/babel">
+
+    const BankConstants = { CREATEACCOUNT:'CreateAccount', WITHDRAW:'WithDraw', DEPOSIT:'Deposit' };
+    let BankActions = {
+        createAccount(line, id) { BankStore.dispatch({ type: BankConstants.CREATEACCOUNT }); },
+        deposit(amount)         { BankStore.dispatch({ type: BankConstants.DEPOSIT, amount: amount }); },
+        withDraw(amount)        { BankStore.dispatch({ type: BankConstants.WITHDRAW, amount: amount }); }
+    }
+    let bankData = function(state = 0, action){
+        switch(action.type){
+        case BankConstants.CREATEACCOUNT:
+            console.log("BankStore", "CreateAccount called"); state = 0; return state;
+        case BankConstants.DEPOSIT:
+            console.log("BankStore", "Deposit called"); return state += parseInt(action.amount);
+        case BankConstants.WITHDRAW: 
+            console.log("BankStore", "WithDraw called"); return state -= parseInt(action.amount);
+        }        
+    }
+    let BankStore = Redux.createStore(bankData);
+    
+  
+    class Container extends React.Component {
+        constructor(){
+            super(); 
+            this.state = { amount:0, balance: BankStore.getState()}
+        }
+
+        componentDidMount() {
+            this.storeSubscription = BankStore.subscribe(_ => this.handleStoreChange()));            BankActions.createAccount();
+        }
+        handleStoreChange(){ this.setState({balance: BankStore.getState()}); }
+        handleChange(event){ this.setState({amount:event.target.value}); }
+
+        render(){
+            return (<div>
+                { this.state.balance } { " euro in bank" }
+                Amount: <input type="text" value={this.state.amount}  onChange={this.handleChange.bind(this)} />
+                <button onClick={() => BankActions.deposit(this.state.amount)}>Add cash</button>
+                <button onClick={() => BankActions.withDraw(this.state.amount)}>Withdraw cash</button>
+                </div>);
+        }
+    }
+   ReactDOM.render(<Container />, document.querySelector("#root"));
+   </script>
+   
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                <title>React 101 (ES6 classes)! - Modern JS</title>
+                <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+                <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+                <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/Flux.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/5.2.5/EventEmitter.js"></script>
+        </head>
+<body>
+   <div id="root"></div>
+
+   <script type="text/babel">
+
+    const CHANGE_EVENT = 'Change';
+    const BankConstants = {
+        CREATEACCOUNT:'CreateAccount',
+        WITHDRAW:'WithDraw',
+        DEPOSIT:'Deposit'
+    };
+
+    class AppDispatcher extends Flux.Dispatcher {
+        dispatch(action = {}) {
+            console.log("Dispatched", action);
+            super.dispatch(action);
+        }
+    }
+    let dispatcher = new AppDispatcher();
+
+    let BankActions = {
+        createAccount(line, id) {
+            dispatcher.dispatch({
+                type: BankConstants.CREATEACCOUNT
+            });
+        },
+        deposit(amount) {  
+            dispatcher.dispatch({ 
+                type: BankConstants.DEPOSIT, 
+                amount: amount
+            }); 
+        },
+        withDraw(amount) {  
+            dispatcher.dispatch({ 
+                type: BankConstants.WITHDRAW, 
+                amount: amount
+            }); 
+        }
+    }
+
+    let __emitter = new EventEmitter();
+    let balance = 0;
+    let id = 0;
+
+    let BankStore = {
+        getState() {
+            return balance;
+        },
+        addListener(callback) {
+            return __emitter.addListener(CHANGE_EVENT, callback);
+        }
+    };
+
+    BankStore.dispatchToken = dispatcher.register((action) => {
+        console.log("Dispatcher", action);
+    switch (action.type) {
+    case BankConstants.CREATEACCOUNT:
+        console.log("BankStore", "CreateAccount called");
+        balance = 0;
+        __emitter.emit(CHANGE_EVENT);
+        break;
+    case BankConstants.DEPOSIT:
+        console.log("BankStore", "Deposit called");
+        balance += parseInt(action.amount);
+        __emitter.emit(CHANGE_EVENT);
+        break;
+    case BankConstants.WITHDRAW:
+        console.log("BankStore", "WithDraw called");
+        balance -= parseInt(action.amount);
+        __emitter.emit(CHANGE_EVENT);
+        break;
+    }});
+
+  
+    class Container extends React.Component {
+        constructor(){
+            super(); 
+            this.state = { amount:0, balance: BankStore.getState()}
+        }
+
+        componentDidMount() {
+            this.storeSubscription = BankStore.addListener(
+            data => this.handleStoreChange (data));
+            BankActions.createAccount();
+        }
+
+        handleStoreChange(){
+            this.setState({balance: BankStore.getState()});
+        }
+
+        handleChange(event){
+            this.setState({amount:event.target.value});
+        }
+
+        render(){
+            
+            return (<div>
+                { BankStore.getState() } { " " }
+                Amount: <input type="text" value={this.state.amount}  onChange={this.handleChange.bind(this)} />
+                <button onClick={() => BankActions.deposit(this.state.amount)}>Add cash</button>
+                <button onClick={() => BankActions.withDraw(this.state.amount)}>Withdraw cash</button>
+                </div>);
+            
+        }
+    }
+   ReactDOM.render(<Container />, document.querySelector("#root"));
+   </script>
+   
+</body>
+</html>

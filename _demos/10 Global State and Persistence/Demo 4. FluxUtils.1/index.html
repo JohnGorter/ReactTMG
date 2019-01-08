@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang="en">
+        <head>
+                <title>React 101 (ES6 classes)! - Modern JS</title>
+                <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+                <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+                <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/Flux.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/FluxUtils.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/5.2.5/EventEmitter.js"></script>
+        </head>
+<body>
+   <div id="root"></div>
+
+   <script type="text/babel">
+
+    const CHANGE_EVENT = 'Change';
+    const BankConstants = { CREATEACCOUNT:'CreateAccount', WITHDRAW:'WithDraw', DEPOSIT:'Deposit' };
+
+    let bankDispatcher = new Flux.Dispatcher();
+    let BankActions = {
+        createAccount(line, id) { bankDispatcher.dispatch({type: BankConstants.CREATEACCOUNT}); },
+        deposit(amount)         {  bankDispatcher.dispatch({type: BankConstants.DEPOSIT, amount: amount }); },
+        withDraw(amount)        {  bankDispatcher.dispatch({ type: BankConstants.WITHDRAW, amount: amount }); }
+    }
+
+    class BankStore extends FluxUtils.ReduceStore {
+        constructor()       { super(bankDispatcher); }
+        getInitialState()   { return 0; }
+        reduce(state, action){
+            console.log("Dispatcher", action);
+            switch (action.type) {
+            case BankConstants.CREATEACCOUNT:
+                console.log("BankStore", "CreateAccount called");
+                state = 0;
+                break;
+            case BankConstants.DEPOSIT:
+                console.log("BankStore", "Deposit called");
+                state += parseInt(action.amount);
+                break;
+            case BankConstants.WITHDRAW:
+                console.log("BankStore", "WithDraw called");
+                state -= parseInt(action.amount);
+                break;
+            }
+            return state;
+        }
+    }
+
+    let bankStore = new BankStore();
+
+    class Container extends React.Component {
+        constructor(){
+            super(); 
+            this.state = { amount:0 };
+            this.handleChange = this.handleChange.bind(this);
+        }
+
+        componentDidMount()     { this.props.onCreateAccount(); }
+        onDeposit = (event) =>  { this.props.onDeposit(this.state.amount); }
+        onWithDraw = (event) => { this.props.onWithDraw(this.state.amount); }
+        handleChange(event)     { this.setState({amount:event.target.value}); }
+
+        render(){
+            return (<div>
+                { this.props.balance } { " euros in bank!" }
+                Amount: <input type="text" value={this.state.amount}  onChange={this.handleChange} />
+                <button onClick={this.onDeposit} >Add cash</button>
+                <button onClick={this.onWithDraw}>Withdraw cash</button>
+            </div>);
+       }
+    }
+
+    let AppContainer = FluxUtils.Container.createFunctional(
+       (props) => (<Container {...props}></Container>), 
+       () => [bankStore], 
+       () => {  return { 
+                    balance:bankStore.getState(), 
+                    onDeposit:BankActions.deposit,
+                    onWithDraw:BankActions.withDraw,
+                    onCreateAccount:BankActions.createAccount,
+                };
+            }
+    );
+
+   ReactDOM.render(<AppContainer />, document.querySelector("#root"));
+   </script>
+   
+</body>
+</html>

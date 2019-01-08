@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Props</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://unpkg.com/react-transition-group/dist/react-transition-group.min.js"></script>
+    
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const defaultStyle = {
+            backgroundColor:'#eee',
+            transition:'all 0.2s ease-in-out'
+        };
+
+        const transitionStyles = {
+                entering: { color:'red' },
+                entered:  { color:'blue' },
+                exiting: { color:'black' },
+                exited: { color:'green' }
+        };
+
+
+        class TransformDemo extends React.Component {
+            constructor() {
+                super();
+                this.state= { in: false };
+            }
+
+            toggleEnterState = () => {
+                this.setState({ in: !this.state.in });
+            }
+
+            render() {
+                return (
+                    <div>
+                        <ReactTransitionGroup.Transition in={this.state.in} timeout={500}>
+                            {
+                                /*
+                                    A function child can be used instead of a React element. This function is called with the current transition status ('entering', 'entered', 'exiting', 'exited', 'unmounted'), which can be used to apply context specific props to a component.
+                                */
+                            }
+                            {(state) => (
+                                    <div style={{
+                                        ...defaultStyle,
+                                        ...transitionStyles[state]
+                                    }}>
+                                        I'm a fade Transition! {state}
+                                    </div>
+                            )}
+                        </ReactTransitionGroup.Transition>
+                        <button onClick={this.toggleEnterState}>Click to Enter</button>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<TransformDemo />, document.querySelector("#root"));
+    </script>
+    
+</body>
+
+</html>
