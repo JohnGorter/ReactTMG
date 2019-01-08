@@ -1,10 +1,5 @@
-# ReactJS
+# Setup
+To start the presentation, clone this repo, cd into the subfolder and
+start npm i, then start the presentation using npm start
 
-## Day 1
 
-1. Intro to ReactJS
-    -
-
-## Day 2
-
-1. Animations (1h ~ 1h15)
