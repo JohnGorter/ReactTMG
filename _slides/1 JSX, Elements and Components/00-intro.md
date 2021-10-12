@@ -160,7 +160,7 @@ React has built-in XSS attack protection
         }
     }
 
-* A JavaScript function *or* classs
+* A JavaScript function *or* class
 * Implements an independent, reusable piece of user interface
 * Return JSX _elements_, which will turn into React elements
 
@@ -173,9 +173,7 @@ import React, {Component} from 'react';
 class Greeter3 extends Component {
     render(){
         var place = "World";
-        render() {
-            return <div className="greeting">Hello, {place}!</div>;
-        }
+        return <div className="greeting">Hello, {place}!</div>;
     }
 }
 ```
@@ -222,7 +220,7 @@ class GroceryList extends Component {
     render(){
         return (
             <ul>
-                <ListItem quantity="1">"Bread" </ListItem>
+                <ListItem quantity="1">Bread</ListItem>
             </ul>
         );
     }

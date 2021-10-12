@@ -14,10 +14,11 @@
    <script type="text/babel">
 
     const BankConstants = { CREATEACCOUNT:'CreateAccount', WITHDRAW:'WithDraw', DEPOSIT:'Deposit' };
+    
     let BankActions = {
-        createAccount(line, id) { BankStore.dispatch({ type: BankConstants.CREATEACCOUNT }); },
-        deposit(amount)         { BankStore.dispatch({ type: BankConstants.DEPOSIT, amount: amount }); },
-        withDraw(amount)        { BankStore.dispatch({ type: BankConstants.WITHDRAW, amount: amount }); }
+        createAccount()     { BankStore.dispatch({ type: BankConstants.CREATEACCOUNT }); },
+        deposit(amount)     { BankStore.dispatch({ type: BankConstants.DEPOSIT, amount: amount }); },
+        withDraw(amount)    { BankStore.dispatch({ type: BankConstants.WITHDRAW, amount: amount }); }
     }
     let bankData = function(state = 0, action){
         switch(action.type){
@@ -39,7 +40,8 @@
         }
 
         componentDidMount() {
-            this.storeSubscription = BankStore.subscribe(_ => this.handleStoreChange()));            BankActions.createAccount();
+            this.storeSubscription = BankStore.subscribe(_ => this.handleStoreChange());            
+            BankActions.createAccount();
         }
         handleStoreChange(){ this.setState({balance: BankStore.getState()}); }
         handleChange(event){ this.setState({amount:event.target.value}); }

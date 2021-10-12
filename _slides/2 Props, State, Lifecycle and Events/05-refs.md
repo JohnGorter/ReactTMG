@@ -14,7 +14,7 @@ Refs as a string prop on component
 Access like
 ```js
 let input = this.refs.myInput;
-console.log(input.getClientBoundingRect();)
+console.log(input.getBoudingClientRect();)
 ```
 
 ---
@@ -29,9 +29,33 @@ class FocusText extends Component {
         return (
             <div>
                 <input type="text" ref="myText"/>
-                <input type="button" onClick={this.handleClick.bind(his)} />
+                <input type="button" onClick={this.handleClick.bind(this)} />
             </div>
         );
+    }
+}
+```
+> But this is deprecated because of security issues..
+
+---
+### Not deprecated way
+
+```
+class MyComponent extends Component {
+    constructor() {
+        super();
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.john.changeTitle("I am changing you");
+    }
+
+    render() {
+        return (<div>
+            <john-element ref={el => this.john = el}></john-element>
+            <button onClick={this.handleClick}>Change the title</button>
+        </div>)
     }
 }
 ```
