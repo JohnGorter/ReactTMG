@@ -1,0 +1,25 @@
+{
+  "name": "myreact",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./public/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-syntax-jsx": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-react": "^7.16.0",
+    "jsdom": "^18.0.0",
+    "requestidlecallback": "^0.3.0",
+    "ric-shim": "^1.0.0",
+    "sleep": "^6.3.0"
+  },
+  "dependencies": {}
+}

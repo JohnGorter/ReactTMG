@@ -173,7 +173,6 @@ function FriendStatusWithCounter(props) {
 
 Hooks let you organize side effects in a component by what pieces are related (such as adding and removing a subscription), rather than forcing a split based on lifecycle methods.
 
-
 ---
 ### Rules of Hooks
 Hooks are JavaScript functions, but they impose two additional rules
@@ -195,7 +194,6 @@ Custom Hooks let you do this, but without adding more components to your tree
 
 ---
 ### Example 
-
 Earlier, a FriendStatus component that calls the useState and useEffect Hooks to subscribe to a friend’s online status
 
 To reuse this subscription logic in another component
@@ -224,7 +222,6 @@ function useFriendStatus(friendID) {
 
 ---
 ### Example 
-
 - second, use it in components
 ```
 function FriendStatus(props) {
@@ -250,13 +247,13 @@ function FriendListItem(props) {
 ### Example 
 Important: 
 - the state of each component is completely independent
-    - you can even use the same custom Hook twice in one component
+    - you can use the same custom Hook twice in one component
 
 ---
 ### Custom Hooks
 Custom Hooks are more of a convention than a feature
 - if function’s name starts with ”use” and calls other Hooks it is a custom Hook
-- the useSomething naming convention is how the linter plugin is able to find bugs in the code using Hooks
+- the useSomething naming convention is how the linter plugin is able to find bugs 
 
 
 ---
@@ -270,6 +267,9 @@ function Example() {
   // ...
 }
 ```
+
+---
+### Other Hooks
 - useReducer -> lets you manage local state of complex components with a reducer
 ```
 function Todos() {
@@ -277,13 +277,11 @@ function Todos() {
   // ...
 ```
 
-
 ---
 <!-- .slide: data-background="url('images/demo.jpg')" data-background-size="cover" --> 
 <!-- .slide: class="lab" -->
 ## Demo time!
 Hooks
-
 
 ---
 <!-- .slide: data-background="url('images/lab2.jpg')" data-background-size="cover"  --> 
